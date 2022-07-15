@@ -1,0 +1,140 @@
+treatment,Treatment,grain_no,spine_no,length_um
+Dandelion,dandelion,1,1,1.693
+Dandelion,dandelion,1,2,1.287
+Dandelion,dandelion,1,3,1.484
+Dandelion,dandelion,1,4,1.013
+Dandelion,dandelion,1,5,1.286
+Dandelion,dandelion,2,1,1.588
+Dandelion,dandelion,2,2,1.35
+Dandelion,dandelion,2,3,1.613
+Dandelion,dandelion,2,4,0.915
+Dandelion,dandelion,2,5,1.461
+Dandelion,dandelion,3,1,1.018
+Dandelion,dandelion,3,2,1.553
+Dandelion,dandelion,3,3,0.954
+Dandelion,dandelion,3,4,1.781
+Dandelion,dandelion,3,5,1.235
+Dogfennel,dog fennel,1,1,0.661
+Dogfennel,dog fennel,1,2,0.588
+Dogfennel,dog fennel,1,3,0.761
+Dogfennel,dog fennel,1,4,0.831
+Dogfennel,dog fennel,1,5,0.859
+Dogfennel,dog fennel,2,1,1.171
+Dogfennel,dog fennel,2,2,0.761
+Dogfennel,dog fennel,2,3,1.015
+Dogfennel,dog fennel,2,4,1.108
+Dogfennel,dog fennel,2,5,0.876
+Dogfennel,dog fennel,3,1,1.196
+Dogfennel,dog fennel,3,2,1.005
+Dogfennel,dog fennel,3,3,0.957
+Dogfennel,dog fennel,3,4,1.124
+Dogfennel,dog fennel,3,5,0.979
+Baccharis,baccharis,1,1,2.943
+Baccharis,baccharis,1,2,3.21
+Baccharis,baccharis,1,3,2.885
+Baccharis,baccharis,1,4,3.08
+Baccharis,baccharis,1,5,2.844
+Baccharis,baccharis,2,1,2.378
+Baccharis,baccharis,2,2,2.763
+Baccharis,baccharis,2,3,2.137
+Baccharis,baccharis,2,4,2.575
+Baccharis,baccharis,2,5,2.383
+Baccharis,baccharis,3,1,1.753
+Baccharis,baccharis,3,2,1.97
+Baccharis,baccharis,3,3,1.663
+Baccharis,baccharis,3,4,1.758
+Baccharis,baccharis,3,5,1.849
+Sagebrush,sagebrush,1,1,0.272
+Sagebrush,sagebrush,1,2,0.277
+Sagebrush,sagebrush,1,3,0.331
+Sagebrush,sagebrush,1,4,0.293
+Sagebrush,sagebrush,1,5,0.307
+Sagebrush,sagebrush,2,1,0.364
+Sagebrush,sagebrush,2,2,0.328
+Sagebrush,sagebrush,2,3,0.29
+Sagebrush,sagebrush,2,4,0.357
+Sagebrush,sagebrush,2,5,0.29
+Sagebrush,sagebrush,3,1,0.227
+Sagebrush,sagebrush,3,2,0.265
+Sagebrush,sagebrush,3,3,0.203
+Sagebrush,sagebrush,3,4,0.321
+Sagebrush,sagebrush,3,5,0.257
+Sunflower,sunflower,1,1,6.1
+Sunflower,sunflower,1,2,6.08
+Sunflower,sunflower,1,3,5.692
+Sunflower,sunflower,1,4,5.46
+Sunflower,sunflower,1,5,6.063
+Sunflower,sunflower,2,1,4.703
+Sunflower,sunflower,2,2,5.494
+Sunflower,sunflower,2,3,4.679
+Sunflower,sunflower,2,4,5.404
+Sunflower,sunflower,2,5,5.016
+Sunflower,sunflower,3,1,4.576
+Sunflower,sunflower,3,2,4.839
+Sunflower,sunflower,3,3,5.572
+Sunflower,sunflower,3,4,4.151
+Sunflower,sunflower,3,5,4.857
+Ambrosia,AMB,1,1,0.765
+Ambrosia,AMB,1,2,0.881
+Ambrosia,AMB,1,3,0.906
+Ambrosia,AMB,1,4,0.869
+Ambrosia,AMB,1,5,0.945
+Ambrosia,AMB,2,1,1.196
+Ambrosia,AMB,2,2,1.091
+Ambrosia,AMB,2,3,0.927
+Ambrosia,AMB,2,4,1.001
+Ambrosia,AMB,2,5,1.06
+Ambrosia,AMB,3,1,0.716
+Ambrosia,AMB,3,2,0.961
+Ambrosia,AMB,3,3,0.86
+Ambrosia,AMB,3,4,0.769
+Ambrosia,AMB,3,5,0.765
+Iva,IVA,1,1,1.591
+Iva,IVA,1,2,1.697
+Iva,IVA,1,3,1.546
+Iva,IVA,1,4,1.891
+Iva,IVA,1,5,1.597
+Iva,IVA,2,1,1.726
+Iva,IVA,2,2,1.874
+Iva,IVA,2,3,1.733
+Iva,IVA,2,4,1.451
+Iva,IVA,2,5,1.734
+Iva,IVA,3,1,1.681
+Iva,IVA,3,2,1.468
+Iva,IVA,3,3,1.203
+Iva,IVA,3,4,1.261
+Iva,IVA,3,5,1.714
+Xanthium,XAN,1,1,1.25
+Xanthium,XAN,1,2,1.211
+Xanthium,XAN,1,3,1.712
+Xanthium,XAN,1,4,1.558
+Xanthium,XAN,1,5,1.733
+Xanthium,XAN,2,1,1.404
+Xanthium,XAN,2,2,1.429
+Xanthium,XAN,2,3,1.808
+Xanthium,XAN,2,4,1.67
+Xanthium,XAN,2,5,1.86
+Xanthium,XAN,3,1,1.619
+Xanthium,XAN,3,2,1.429
+Xanthium,XAN,3,3,1.463
+Xanthium,XAN,3,4,1.677
+Xanthium,XAN,3,5,1.527
+Buckwheat,buckwheat,NA,NA,0
+Maple,red maple,NA,NA,0
+Sunflower,SUN,1,1,6.1
+Sunflower,SUN,1,2,6.08
+Sunflower,SUN,1,3,5.692
+Sunflower,SUN,1,4,5.46
+Sunflower,SUN,1,5,6.063
+Sunflower,SUN,2,1,4.703
+Sunflower,SUN,2,2,5.494
+Sunflower,SUN,2,3,4.679
+Sunflower,SUN,2,4,5.404
+Sunflower,SUN,2,5,5.016
+Sunflower,SUN,3,1,4.576
+Sunflower,SUN,3,2,4.839
+Sunflower,SUN,3,3,5.572
+Sunflower,SUN,3,4,4.151
+Sunflower,SUN,3,5,4.857
+Buckwheat,BW,NA,NA,0
+Maple,MAP,NA,NA,0

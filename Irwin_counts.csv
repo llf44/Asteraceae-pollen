@@ -1,0 +1,253 @@
+Bee_ID,Colony,Inoc_Date,Treatment,Count,Wing_MM,Dead,Death_date,Notes,LAB
+1,UN1,1/12/2021,baccharis,113,2.626,N,1/19/2021,diluted 50%,Irwin
+2,UN1,1/12/2021,baccharis,0,2.487,N,1/19/2021,,Irwin
+3,UN2,1/12/2021,baccharis,0,2.58,N,1/19/2021,,Irwin
+4,UN2,1/12/2021,baccharis,15,2.575,N,1/19/2021,,Irwin
+5,UN4,1/12/2021,baccharis,54,3.009,N,1/19/2021,diluted 50%,Irwin
+6,UN4,1/12/2021,baccharis,1,2.501,N,1/19/2021,,Irwin
+7,UN1,1/12/2021,dog fennel,30,2.229,N,1/19/2021,,Irwin
+8,UN1,1/12/2021,dog fennel,22,2.581,N,1/19/2021,,Irwin
+9,UN2,1/12/2021,dog fennel,17,2.587,N,1/19/2021,,Irwin
+10,UN2,1/12/2021,dog fennel,45,2.687,N,1/19/2021,,Irwin
+11,UN4,1/12/2021,dog fennel,n/a,n/a,Y,1/16/2021,,Irwin
+12,UN4,1/12/2021,dog fennel,0,2.494,N,1/19/2021,,Irwin
+13,UN1,1/12/2021,sagebrush,1,3.09,N,1/19/2021,,Irwin
+14,UN1,1/12/2021,sagebrush,48,2.493,N,1/19/2021,,Irwin
+15,UN2,1/12/2021,sagebrush,10,2.382,N,1/19/2021,,Irwin
+16,UN2,1/12/2021,sagebrush,26,2.755,N,1/19/2021,,Irwin
+17,UN4,1/12/2021,sagebrush,42,2.948,N,1/19/2021,,Irwin
+18,UN4,1/12/2021,sagebrush,51,2.608,N,1/19/2021,,Irwin
+19,UN1,1/12/2021,dandelion,3,2.899,N,1/19/2021,,Irwin
+20,UN1,1/12/2021,dandelion,0,2.64,N,1/19/2021,,Irwin
+21,UN2,1/12/2021,dandelion,0,2.543,N,1/19/2021,,Irwin
+22,UN2,1/12/2021,dandelion,0,2.163,N,1/19/2021,,Irwin
+23,UN4,1/12/2021,dandelion,0,2.317,N,1/19/2021,,Irwin
+24,UN4,1/12/2021,dandelion,9,2.603,N,1/19/2021,,Irwin
+25,UN1,1/12/2021,red maple,25,2.925,N,1/19/2021,,Irwin
+26,UN1,1/12/2021,red maple,29,2.963,N,1/19/2021,,Irwin
+27,UN2,1/12/2021,red maple,10,2.287,N,1/19/2021,,Irwin
+28,UN2,1/12/2021,red maple,24,2.552,N,1/19/2021,,Irwin
+29,UN4,1/12/2021,red maple,102,2.707,N,1/19/2021,diluted-100 uL water: 10 uL supernatant,Irwin
+30,UN4,1/12/2021,red maple,64,2.744,N,1/19/2021,,Irwin
+31,UN1,1/12/2021,sunflower,0,2.7,N,1/19/2021,,Irwin
+32,UN1,1/12/2021,sunflower,0,2.674,N,1/19/2021,,Irwin
+33,UN2,1/12/2021,sunflower,2,1.976,N,1/19/2021,,Irwin
+34,UN2,1/12/2021,sunflower,5,2.512,N,1/19/2021,,Irwin
+35,UN4,1/12/2021,sunflower,0,2.435,N,1/19/2021,,Irwin
+36,UN4,1/12/2021,sunflower,0,2.462,N,1/19/2021,,Irwin
+37,UN1,1/12/2021,buckwheat,175,2.623,N,1/19/2021,,Irwin
+38,UN1,1/12/2021,buckwheat,105,2.48,N,1/19/2021,diluted- 40 uL water: 10 uL supernatant,Irwin
+39,UN2,1/12/2021,buckwheat,87,2.103,N,1/19/2021,,Irwin
+40,UN2,1/12/2021,buckwheat,12,2.496,N,1/19/2021,,Irwin
+41,UN4,1/12/2021,buckwheat,95,2.781,N,1/19/2021,,Irwin
+42,UN4,1/12/2021,buckwheat,2,2.65,N,1/19/2021,,Irwin
+78,UN1,1/18/2021,baccharis,223,2.601,N,1/25/2021,78-101 may have sat too long- 4-4.5 hours before crithidia counts,Irwin
+79,UN1,1/18/2021,baccharis,3,2.006,N,1/25/2021,,Irwin
+80,UN2,1/18/2021,baccharis,1,2.573,N,1/25/2021,,Irwin
+81,UN2,1/18/2021,baccharis,7,2.275,N,1/25/2021,,Irwin
+82,UN4,1/18/2021,baccharis,n/a,n/a,Y,1/22/2021,Escaped!,Irwin
+83,UN4,1/18/2021,baccharis,4,3.03,N,1/25/2021,,Irwin
+84,UN1,1/18/2021,dog fennel,7,2.662,N,1/25/2021,,Irwin
+85,UN1,1/18/2021,dog fennel,3,2.516,N,1/25/2021,,Irwin
+86,UN2,1/18/2021,dog fennel,21,2.56,N,1/25/2021,,Irwin
+87,UN2,1/18/2021,dog fennel,0,2.458,N,1/25/2021,,Irwin
+88,UN4,1/18/2021,dog fennel,0,2.481,N,1/25/2021,,Irwin
+89,UN4,1/18/2021,dog fennel,2,2.674,N,1/25/2021,,Irwin
+90,UN1,1/18/2021,sagebrush,1,2.766,N,1/25/2021,,Irwin
+91,UN1,1/18/2021,sagebrush,36,2.584,N,1/25/2021,,Irwin
+92,UN2,1/18/2021,sagebrush,1,2.517,N,1/25/2021,,Irwin
+93,UN2,1/18/2021,sagebrush,92,2.54,N,1/25/2021,diluted 1/3,Irwin
+94,UN4,1/18/2021,sagebrush,2,2.734,N,1/25/2021,,Irwin
+95,UN4,1/18/2021,sagebrush,21,2.471,N,1/25/2021,,Irwin
+96,UN1,1/18/2021,dandelion,0,2.431,N,1/25/2021,,Irwin
+97,UN1,1/18/2021,dandelion,0,2.652,N,1/25/2021,,Irwin
+98,UN2,1/18/2021,dandelion,1,2.339,N,1/25/2021,,Irwin
+99,UN2,1/18/2021,dandelion,32,2.08,N,1/25/2021,,Irwin
+100,UN4,1/18/2021,dandelion,0,2.796,N,1/25/2021,,Irwin
+101,UN4,1/18/2021,dandelion,0,2.72,N,1/25/2021,,Irwin
+102,UN1,1/18/2021,red maple,56,2.531,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+103,UN1,1/18/2021,red maple,41,2.9,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+104,UN2,1/18/2021,red maple,3,2.75,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+105,UN2,1/18/2021,red maple,n/a,n/a,Y,1/20/2021,,Irwin
+106,UN4,1/18/2021,red maple,0,2.702,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+107,UN4,1/18/2021,red maple,3,2.582,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+108,UN1,1/18/2021,sunflower,0,2.76,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+109,UN1,1/18/2021,sunflower,9,2.715,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+110,UN2,1/18/2021,sunflower,0,2.387,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+111,UN2,1/18/2021,sunflower,0,2.348,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+112,UN4,1/18/2021,sunflower,0,2.696,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+113,UN4,1/18/2021,sunflower,0,2.693,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+114,UN1,1/18/2021,buckwheat,0,2.448,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+115,UN1,1/18/2021,buckwheat,30,2.75,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+116,UN2,1/18/2021,buckwheat,141,2.383,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+117,UN2,1/18/2021,buckwheat,32,2.393,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+118,UN4,1/18/2021,buckwheat,34,2.681,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+119,UN4,1/18/2021,buckwheat,44,2.563,N,1/25/2021,Ran out of CO2 gas. Chilled prior to dissection.,Irwin
+120,UN1,1/21/2021,baccharis,0,n/a,N,1/28/2021,Wings completely undeveloped,Irwin
+121,UN1,1/21/2021,baccharis,37,2.641,N,1/28/2021,,Irwin
+122,UN2,1/21/2021,baccharis,0,2.543,N,1/28/2021,,Irwin
+123,UN2,1/21/2021,baccharis,21,2.58,N,1/28/2021,,Irwin
+124,UN4,1/21/2021,baccharis,0,3.031,N,1/28/2021,,Irwin
+125,UN4,1/21/2021,baccharis,0,2.55,N,1/28/2021,,Irwin
+126,UN1,1/21/2021,dog fennel,171,2.664,N,1/28/2021,,Irwin
+127,UN1,1/21/2021,dog fennel,0,2.621,N,1/28/2021,,Irwin
+128,UN2,1/21/2021,dog fennel,1,2.335,N,1/28/2021,,Irwin
+129,UN2,1/21/2021,dog fennel,67,2.423,N,1/28/2021,,Irwin
+130,UN4,1/21/2021,dog fennel,0,2.66,N,1/28/2021,,Irwin
+131,UN4,1/21/2021,dog fennel,7,2.701,N,1/28/2021,,Irwin
+132,UN1,1/21/2021,sagebrush,1,2.6,N,1/28/2021,,Irwin
+133,UN1,1/21/2021,sagebrush,16,2.272,N,1/28/2021,,Irwin
+134,UN2,1/21/2021,sagebrush,6,2.058,N,1/28/2021,,Irwin
+135,UN2,1/21/2021,sagebrush,41,2.216,N,1/28/2021,,Irwin
+136,UN4,1/21/2021,sagebrush,60,2.594,N,1/28/2021,,Irwin
+137,UN4,1/21/2021,sagebrush,2,2.843,N,1/28/2021,,Irwin
+138,UN1,1/21/2021,dandelion,n/a,n/a,Y,1/26/2021,Never put in sucrose feeder smh,Irwin
+139,UN1,1/21/2021,dandelion,10,2.642,N,1/28/2021,,Irwin
+140,UN2,1/21/2021,dandelion,1,2.58,N,1/28/2021,,Irwin
+141,UN2,1/21/2021,dandelion,25,2.572,N,1/28/2021,,Irwin
+142,UN4,1/21/2021,dandelion,0,2.54,N,1/28/2021,,Irwin
+143,UN4,1/21/2021,dandelion,0,2.634,N,1/28/2021,,Irwin
+144,UN1,1/21/2021,red maple,204,2.532,N,1/28/2021,,Irwin
+145,UN1,1/21/2021,red maple,1,2.506,N,1/28/2021,,Irwin
+146,UN2,1/21/2021,red maple,72,2.965,N,1/28/2021,,Irwin
+147,UN2,1/21/2021,red maple,115,2.664,N,1/28/2021,cut with water 3:1 (water:supernatant),Irwin
+148,UN4,1/21/2021,red maple,2,2.635,N,1/28/2021,,Irwin
+149,UN4,1/21/2021,red maple,0,2.817,N,1/28/2021,,Irwin
+150,UN1,1/21/2021,sunflower,136,2.38,N,1/28/2021,Used left wing,Irwin
+151,UN1,1/21/2021,sunflower,0,2.307,N,1/28/2021,,Irwin
+152,UN2,1/21/2021,sunflower,7,2.123,N,1/28/2021,,Irwin
+153,UN2,1/21/2021,sunflower,0,2.408,N,1/28/2021,,Irwin
+154,UN4,1/21/2021,sunflower,n/a,n/a,Y,1/26/2021,1/26/21 currently dying- will probably be dead by tomorrow,Irwin
+155,UN4,1/21/2021,sunflower,0,2.522,N,1/28/2021,,Irwin
+156,UN1,1/21/2021,buckwheat,75,2.589,N,1/28/2021,,Irwin
+157,UN1,1/21/2021,buckwheat,33,2.784,N,1/28/2021,,Irwin
+158,UN2,1/21/2021,buckwheat,53,2.421,N,1/28/2021,,Irwin
+159,UN2,1/21/2021,buckwheat,124,n/a,N,1/28/2021,Both wings ripped off/missing,Irwin
+160,UN4,1/21/2021,buckwheat,55,2.511,N,1/28/2021,,Irwin
+161,UN4,1/21/2021,buckwheat,2,2.702,N,1/28/2021,,Irwin
+162,UN1,1/29/2021,baccharis,0,2.74,N,2/3/2021,,Irwin
+163,UN1,1/29/2021,baccharis,0,2.822,N,2/3/2021,,Irwin
+164,UN2,1/29/2021,baccharis,6,1.926,N,2/3/2021,,Irwin
+165,UN2,1/29/2021,baccharis,12,2.432,N,2/3/2021,,Irwin
+166,UN4,1/29/2021,baccharis,1,2.711,N,2/3/2021,,Irwin
+167,UN4,1/29/2021,baccharis,1,2.343,N,2/3/2021,,Irwin
+168,UN1,1/29/2021,dog fennel,n/a,n/a,n/a,n/a,escaped 1/31/21,Irwin
+169,UN1,1/29/2021,dog fennel,0,2.893,N,2/3/2021,,Irwin
+170,UN2,1/29/2021,dog fennel,0,2.806,N,2/3/2021,,Irwin
+171,UN2,1/29/2021,dog fennel,0,2.717,N,2/3/2021,,Irwin
+172,UN4,1/29/2021,dog fennel,3,2.64,N,2/3/2021,,Irwin
+173,UN4,1/29/2021,dog fennel,0,2.78,N,2/3/2021,,Irwin
+174,UN1,1/29/2021,sagebrush,83,2.5,N,2/3/2021,,Irwin
+175,UN1,1/29/2021,sagebrush,1,2.851,N,2/3/2021,,Irwin
+176,UN2,1/29/2021,sagebrush,1,2.848,N,2/3/2021,,Irwin
+177,UN2,1/29/2021,sagebrush,205,2.527,N,2/3/2021,,Irwin
+178,UN4,1/29/2021,sagebrush,0,2.637,N,2/3/2021,,Irwin
+179,UN4,1/29/2021,sagebrush,0,2.806,N,2/3/2021,,Irwin
+180,UN1,1/29/2021,dandelion,0,2.703,N,2/3/2021,,Irwin
+181,UN1,1/29/2021,dandelion,4,2.461,N,2/3/2021,,Irwin
+182,UN2,1/29/2021,dandelion,1,2.627,N,2/3/2021,,Irwin
+183,UN2,1/29/2021,dandelion,6,2.549,N,2/3/2021,,Irwin
+184,UN4,1/29/2021,dandelion,0,2.512,N,2/3/2021,,Irwin
+185,UN4,1/29/2021,dandelion,0,2.42,N,2/3/2021,,Irwin
+186,UN1,1/29/2021,red maple,8,2.935,N,2/3/2021,,Irwin
+187,UN1,1/29/2021,red maple,10,2.993,N,2/3/2021,,Irwin
+188,UN2,1/29/2021,red maple,2,2.83,N,2/3/2021,,Irwin
+189,UN2,1/29/2021,red maple,71,2.667,N,2/3/2021,diluted 1/3,Irwin
+190,UN4,1/29/2021,red maple,0,2.255,N,2/3/2021,,Irwin
+191,UN4,1/29/2021,red maple,0,2.584,N,2/3/2021,,Irwin
+192,UN1,1/29/2021,sunflower,0,2.727,N,2/3/2021,,Irwin
+193,UN1,1/29/2021,sunflower,0,2.492,N,2/3/2021,,Irwin
+194,UN2,1/29/2021,sunflower,0,2.648,N,2/3/2021,,Irwin
+195,UN2,1/29/2021,sunflower,38,2.422,N,2/3/2021,,Irwin
+196,UN4,1/29/2021,sunflower,0,2.696,N,2/3/2021,,Irwin
+197,UN4,1/29/2021,sunflower,0,2.319,N,2/3/2021,,Irwin
+198,UN1,1/29/2021,buckwheat,11,2.682,N,2/3/2021,,Irwin
+199,UN1,1/29/2021,buckwheat,6,2.628,N,2/3/2021,,Irwin
+200,UN2,1/29/2021,buckwheat,41,2.471,N,2/3/2021,,Irwin
+201,UN2,1/29/2021,buckwheat,3,1.931,N,2/3/2021,,Irwin
+202,UN4,1/29/2021,buckwheat,38,2.927,N,2/3/2021,diluted 1/3,Irwin
+203,UN4,1/29/2021,buckwheat,0,2.724,N,2/3/2021,,Irwin
+204,UN1,2/5/2021,baccharis,n/a,n/a,Y,2/10/2021,escaped,Irwin
+205,UN1,2/5/2021,baccharis,1,3.031,N,2/12/2021,,Irwin
+206,UN2,2/5/2021,baccharis,0,2.487,N,2/12/2021,,Irwin
+207,UN2,2/5/2021,baccharis,43,2.443,N,2/12/2021,,Irwin
+208,UN4,2/5/2021,baccharis,n/a,n/a,Y,2/10/2021,,Irwin
+209,UN4,2/5/2021,baccharis,0,2.67,N,2/12/2021,,Irwin
+210,UN1,2/5/2021,dog fennel,0,2.749,N,2/12/2021,,Irwin
+211,UN1,2/5/2021,dog fennel,33,2.478,N,2/12/2021,,Irwin
+212,UN2,2/5/2021,dog fennel,5,2.508,N,2/12/2021,,Irwin
+213,UN2,2/5/2021,dog fennel,4,2.427,N,2/12/2021,,Irwin
+214,UN4,2/5/2021,dog fennel,0,2.728,N,2/12/2021,,Irwin
+215,UN4,2/5/2021,dog fennel,34,2.709,N,2/12/2021,,Irwin
+216,UN1,2/5/2021,sagebrush,0,3.154,N,2/12/2021,,Irwin
+217,UN1,2/5/2021,sagebrush,77,2.662,N,2/12/2021,,Irwin
+218,UN2,2/5/2021,sagebrush,133,2.691,N,2/12/2021,diluted 1/3,Irwin
+219,UN2,2/5/2021,sagebrush,1,2.261,N,2/12/2021,,Irwin
+220,UN4,2/5/2021,sagebrush,37,2.393,N,2/12/2021,,Irwin
+221,UN4,2/5/2021,sagebrush,24,2.744,N,2/12/2021,,Irwin
+222,UN1,2/5/2021,dandelion,23,2.55,N,2/12/2021,,Irwin
+223,UN1,2/5/2021,dandelion,1,2.485,N,2/12/2021,,Irwin
+224,UN2,2/5/2021,dandelion,3,3.136,N,2/12/2021,,Irwin
+225,UN2,2/5/2021,dandelion,0,2.734,N,2/12/2021,,Irwin
+226,UN4,2/5/2021,dandelion,0,2.729,N,2/12/2021,,Irwin
+227,UN4,2/5/2021,dandelion,22,n/a,N,2/12/2021,wing ripped,Irwin
+228,UN1,2/5/2021,red maple,164,2.734,N,2/12/2021,dilute 1/3,Irwin
+229,UN1,2/5/2021,red maple,183,2.496,N,2/12/2021,,Irwin
+230,UN2,2/5/2021,red maple,132,2.625,N,2/12/2021,diluted 1/5,Irwin
+231,UN2,2/5/2021,red maple,0,2.561,N,2/12/2021,,Irwin
+232,UN4,2/5/2021,red maple,33,2.88,N,2/12/2021,,Irwin
+233,UN4,2/5/2021,red maple,0,2.43,N,2/12/2021,wing ripped,Irwin
+234,UN1,2/5/2021,sunflower,3,2.988,N,2/12/2021,,Irwin
+235,UN1,2/5/2021,sunflower,27,2.99,N,2/12/2021,,Irwin
+236,UN2,2/5/2021,sunflower,26,2.658,N,2/12/2021,,Irwin
+237,UN2,2/5/2021,sunflower,0,2.301,N,2/12/2021,,Irwin
+238,UN4,2/5/2021,sunflower,111,2.582,N,2/12/2021,,Irwin
+239,UN4,2/5/2021,sunflower,1,n/a,N,2/12/2021,"bee thrown away, wing lost",Irwin
+240,UN1,2/5/2021,buckwheat,165,2.654,N,2/12/2021,,Irwin
+241,UN1,2/5/2021,buckwheat,1,2.718,N,2/12/2021,,Irwin
+242,UN2,2/5/2021,buckwheat,29,2.398,N,2/12/2021,,Irwin
+243,UN2,2/5/2021,buckwheat,44,2.543,N,2/12/2021,,Irwin
+244,UN4,2/5/2021,buckwheat,0,2.15,N,2/12/2021,,Irwin
+245,UN4,2/5/2021,buckwheat,11,2.518,N,2/12/2021,,Irwin
+246,UN1,2/9/2021,baccharis,n/a,n/a,Y,2/15/2021,,Irwin
+247,UN1,2/9/2021,baccharis,8,2.734,N,2/16/2021,,Irwin
+248,UN2,2/9/2021,baccharis,n/a,n/a,Y,2/15/2021,,Irwin
+249,UN2,2/9/2021,baccharis,153,1.866,N,2/16/2021,,Irwin
+250,UN4,2/9/2021,baccharis,0,2.664,N,2/16/2021,,Irwin
+251,UN4,2/9/2021,baccharis,0,2.823,N,2/16/2021,,Irwin
+252,UN1,2/9/2021,dog fennel,5,2.808,N,2/16/2021,,Irwin
+253,UN1,2/9/2021,dog fennel,2,3.004,N,2/16/2021,,Irwin
+254,UN2,2/9/2021,dog fennel,n/a,n/a,Y,2/14/2021,,Irwin
+255,UN2,2/9/2021,dog fennel,71,2.351,N,2/16/2021,,Irwin
+256,UN4,2/9/2021,dog fennel,0,2.9,N,2/16/2021,,Irwin
+257,UN4,2/9/2021,dog fennel,n/a,n/a,Y,2/15/2021,,Irwin
+258,UN1,2/9/2021,sagebrush,29,2.95,N,2/16/2021,,Irwin
+259,UN1,2/9/2021,sagebrush,n/a,n/a,Y,2/15/2021,,Irwin
+260,UN2,2/9/2021,sagebrush,106,2.718,N,2/16/2021,diluted 1/3,Irwin
+261,UN2,2/9/2021,sagebrush,193,3.113,N,2/16/2021,,Irwin
+262,UN4,2/9/2021,sagebrush,90,2.715,N,2/16/2021,,Irwin
+263,UN4,2/9/2021,sagebrush,37,2.695,N,2/16/2021,,Irwin
+264,UN1,2/9/2021,dandelion,0,3.003,N,2/16/2021,,Irwin
+265,UN1,2/9/2021,dandelion,0,2.977,N,2/16/2021,,Irwin
+266,UN2,2/9/2021,dandelion,4,n/a,N,2/16/2021,"bee thrown away, wing lost",Irwin
+267,UN2,2/9/2021,dandelion,2,2.902,N,2/16/2021,,Irwin
+268,UN4,2/9/2021,dandelion,3,2.557,N,2/16/2021,,Irwin
+269,UN4,2/9/2021,dandelion,0,2.357,N,2/16/2021,,Irwin
+270,UN1,2/9/2021,red maple,n/a,n/a,Y,2/15/2021,,Irwin
+271,UN1,2/9/2021,red maple,58,3.264,N,2/16/2021,,Irwin
+272,UN2,2/9/2021,red maple,55,2.554,N,2/16/2021,,Irwin
+273,UN2,2/9/2021,red maple,67,2.845,N,2/16/2021,,Irwin
+274,UN4,2/9/2021,red maple,259,2.331,N,2/16/2021,,Irwin
+275,UN4,2/9/2021,red maple,5,2.706,N,2/16/2021,,Irwin
+276,UN1,2/9/2021,sunflower,31,2.742,N,2/16/2021,,Irwin
+277,UN1,2/9/2021,sunflower,1,2.969,N,2/16/2021,,Irwin
+278,UN2,2/9/2021,sunflower,5,2.307,N,2/16/2021,,Irwin
+279,UN2,2/9/2021,sunflower,29,2.692,N,2/16/2021,,Irwin
+280,UN4,2/9/2021,sunflower,0,2.705,N,2/16/2021,,Irwin
+281,UN4,2/9/2021,sunflower,n/a,n/a,Y,2/14/2021,,Irwin
+282,UN1,2/9/2021,buckwheat,136,2.595,N,2/16/2021,,Irwin
+283,UN1,2/9/2021,buckwheat,49,3.131,N,2/16/2021,,Irwin
+284,UN2,2/9/2021,buckwheat,187,2.28,N,2/16/2021,,Irwin
+285,UN2,2/9/2021,buckwheat,18,2.442,N,2/16/2021,,Irwin
+286,UN4,2/9/2021,buckwheat,126,2.674,N,2/16/2021,,Irwin
+287,UN4,2/9/2021,buckwheat,1,2.731,N,2/16/2021,,Irwin
