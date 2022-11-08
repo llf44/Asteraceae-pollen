@@ -1,0 +1,1079 @@
+---
+title: "Sunflower spines and beyond: mechanisms and breadth of pollen that reduce gut pathogen infection in bumble bees"
+author: "Laura Figueroa"
+date: "7/14/2022"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+## Libraries used
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+library(lme4)
+library(car)
+library(ggplot2)
+library(tidyr)
+library(lmerTest)
+library(DHARMa)
+library(multcomp)
+library(glmmTMB)
+library(coxme)
+library(emmeans)
+library(broom)
+library(performance)
+library(dplyr)
+library(viridis)
+library(EMAtools)
+library(effsize)
+library(FSA)
+
+
+```
+
+## Setting my working directory and importing the files 
+
+Pathogen data = Count and Consumption data = Consume 
+
+Each lab has their own datafiles
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+ACount <- read.csv("Adler_counts.csv")
+AConsume <- read.csv("Adler_consumption.csv")
+ICount <- read.csv("Irwin_counts.csv")
+IConsume <- read.csv("Irwin_consumption.csv")
+spines<-read.csv("spine_lengths.csv")
+SpikesAOriginal<-read.csv("Adler_spikey_pollen.csv", header = T)
+SpikesAConsume<-read.csv("Adler_spikey_pollen_consumption.csv", header = T)
+SpikesIOriginal<-read.csv("Irwin_spikey_pollen.csv", header = T)
+SpikesISize<-read.csv("Irwin_spikey_pollen_wing_size.csv", header = T)
+
+SpikesI<-merge(SpikesIOriginal, SpikesISize, by="Bee_ID")
+SpikesAConsume<-merge(SpikesAOriginal, SpikesAConsume, by="ID")
+
+cols <- c( "Bee_ID", "Colony", "Treatment")
+AConsume[cols] <- lapply(AConsume[cols], factor)
+
+cols <- c( "Bee_ID", "Colony", "Treatment")
+ACount[cols] <- lapply(ACount[cols], factor)
+
+cols <- c( "Bee_ID", "Colony", "Treatment")
+IConsume[cols] <- lapply(IConsume[cols], factor)
+
+cols <- c( "Bee_ID", "Colony", "Treatment")
+ICount[cols] <- lapply(ICount[cols], factor)
+
+cols <- c( "ID", "treatment", "species", "pollen_form","colony", "source_colony_ID")
+SpikesAConsume[cols] <- lapply(SpikesAConsume[cols], factor)
+
+cols <- c( "ID", "treatment", "species", "pollen_form","colony", "source_colony_ID")
+SpikesAOriginal[cols] <- lapply(SpikesAOriginal[cols], factor)
+
+cols <- c( "Bee_ID", "colony", "treatment", "species", "pollen_form")
+SpikesI[cols] <- lapply(SpikesI[cols], factor)
+
+cols <- c( "Bee_ID", "colony", "treatment", "species", "pollen_form")
+SpikesI[cols] <- lapply(SpikesI[cols], factor)
+
+cols <- c( "treatment", "Treatment")
+spines[cols] <- lapply(spines[cols], factor)
+
+
+```
+
+## DATA QUALITY ASSURANCE
+
+## Adler lab
+
+Adler pathogen data:
+
+Because the pollen was really dry and crumbly at the Adler lab, after the first two days sucrose was added to the pollen patties. As such, I will remove the first two days of inoculation, since they are not representative of the rest of the experimental design
+
+There were 10 bees that escaped/not fed so these will be removed from the datasheet: specifically Bees_IDs: 26, 52, 60, 76, 86, 89, 92, 123, 190, 210 (removed by removing the NA from the Dead column)
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+ACount<-ACount %>% filter(!Inoc_Date=="1/11/2021" & !Inoc_Date== "1/12/2021")
+ACount <- ACount %>% filter(!is.na(Dead)) 
+#getting the dates properly formatted
+ACount$Inoc_Date<-as.Date(ACount$Inoc_Date, "%m/%d/%Y")
+ACount$Death_date<-as.Date(ACount$Death_date, "%m/%d/%Y")
+#removing escaped/misc bees
+ACount<-ACount %>% filter(!Bee_ID==26  & !Bee_ID== 52  & !Bee_ID== 60  & !Bee_ID== 76  & !Bee_ID== 86  & !Bee_ID== 89  & !Bee_ID== 92  & !Bee_ID== 123  & !Bee_ID== 190  & !Bee_ID== 210)
+#making sure that factors are demarcated as such
+cols <- c( "Colony", "Treatment", "LAB")
+ACount[cols] <- lapply(ACount[cols], factor)
+summary(ACount)
+
+```
+
+Adler consumption data:
+
+Because the pollen was really dry and crumbly at the Adler lab, after the first two days sucrose was added to the pollen patties. As such, I will remove the first two days of inoculation, since they are not representative of the rest of the experimental design
+
+There were 10 bees that escaped/not fed so these will be removed from the datasheet: specifically Bees_IDs: 26, 52, 60, 76, 86, 89, 92, 123, 190, 210
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+AConsume<-AConsume %>% filter(!Initial_date=="1/11/2021" & !Initial_date== "1/12/2021")
+AConsume$Initial_date<-as.Date(AConsume$Initial_date, "%m/%d/%Y")
+AConsume$Final_date<-as.Date(AConsume$Final_date, "%m/%d/%Y")
+cols <- c("Colony", "Treatment")
+AConsume[cols] <- lapply(AConsume[cols], factor)
+AConsume<-AConsume %>% filter(!Bee_ID==26  & !Bee_ID== 52  & !Bee_ID== 60  & !Bee_ID== 76  & !Bee_ID== 86  & !Bee_ID== 89  & !Bee_ID== 92  & !Bee_ID== 123  & !Bee_ID== 190  & !Bee_ID== 210)
+AConsume$Initial_pollen_weight <- as.numeric(paste(AConsume$Initial_pollen_weight))
+AConsume$Final_pollen_weight <- as.numeric(paste(AConsume$Final_pollen_weight))
+summary(AConsume)
+```
+
+##Irwin lab
+
+Irwin pathogen data:
+
+Bee 82  168 204 escaped and bee 138 was accidentally not fed, so these will be removed from the datasheet
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+ICount <- ICount %>% filter(!Bee_ID==82 & !Bee_ID==168 & !Bee_ID==204 & !Bee_ID==138)
+ICount$Inoc_Date<-as.Date(ICount$Inoc_Date, "%m/%d/%Y")
+ICount$Death_date<-as.Date(ICount$Death_date, "%m/%d/%Y")
+#making sure that factors are demarcated as such
+cols <- c("Colony", "Treatment", "LAB")
+ICount[cols] <- lapply(ICount[cols], factor)
+ICount$Count<-as.numeric(ICount$Count)
+ICount$Wing_MM<-as.numeric(ICount$Wing_MM)
+summary(ICount)
+
+```
+
+Irwin consumption Data
+
+Bee 82  168 204 escaped and bee 138 was accidentally not fed, so these will be removed from the datasheet
+
+```{r, results = 'hide', message = FALSE, warning = FALSE}
+IConsume$Initial_date<-as.Date(IConsume$Initial_date, "%m/%d/%Y")
+IConsume$Final_date<-as.Date(IConsume$Final_date, "%m/%d/%Y")
+IConsume <- IConsume %>% filter(!Bee_ID==82 & !Bee_ID==168 & !Bee_ID==204 & !Bee_ID==138)
+cols <- c("Colony", "Treatment")
+IConsume[cols] <- lapply(IConsume[cols], factor)
+IConsume$Wing_MM<-as.numeric(IConsume$Wing_MM)
+summary(IConsume)
+IConsume$Initial_pollen_weight <- as.numeric(paste(IConsume$Initial_pollen_weight))
+IConsume$Final_pollen_weight <- as.numeric(paste(IConsume$Final_pollen_weight))
+summary(IConsume)
+```
+
+## Getting spine length averages and combining with other datasets
+
+```{r}
+spine_AVG<-spines %>% group_by(Treatment) %>%
+  summarise(avg_pollen_length = mean(length_um), 
+              SE = se(length_um))
+
+AConsume<-merge(AConsume,spine_AVG, by="Treatment")
+
+IConsume<-merge(IConsume,spine_AVG, by="Treatment")
+
+ACount<-merge(ACount,spine_AVG, by="Treatment")
+
+ICount<-merge(ICount,spine_AVG, by="Treatment")
+
+```
+
+## Accounting for evaporation in the pollen consumption assays
+
+We have an initial and final weight of pollen for each bee, if there was no evaporation, then I could just make that subtraction and that would be the pollen consumed. Alas, there is evaporation and I need to account for it. Moreover, there is a different evaporation rate for each of the pollen type separately, because they each had their own consistency, which likely affected evaporation rate.
+
+```{r}
+library(viridis)
+evap_AC <- AConsume %>%
+  filter(Colony == "control")
+ggplot(aes(x=Initial_pollen_weight, y=Final_pollen_weight, col=Treatment), data=evap_AC) + geom_point() + labs(title = "Regression for control pollen (no bees) lab 1") + theme_bw()
+
+evap_IC <- IConsume %>%
+  filter(Colony == "control")
+ggplot(aes(x=Initial_pollen_weight, y=Final_pollen_weight, col=Treatment), data=evap_IC) + geom_point() + labs(title = "Regression for control pollen (no bees) lab 2") + theme_bw()
+
+control_evap_A<- ggplot(aes(x=Initial_pollen_weight, y=Final_pollen_weight, col=Treatment), data=evap_AC) + geom_point(size=4) + theme_classic(base_size=20)  +
+  theme(legend.text.align = 0) +
+  labs(x="Initial pollen weight", y = "Final pollen weight") +
+  scale_color_viridis(labels = c(expression("Ragweed"),expression("Buckwheat"),expression("Marsh elder"), expression("Red maple"), expression("Sunflower"), expression("Cocklebur")), discrete=TRUE, option ="magma") +
+  scale_y_continuous(breaks = seq(0.2, 0.45, by = 0.05),
+                     limits = c(0.2,0.45),
+                     expand = c(0,0)) +
+  scale_x_continuous(breaks = seq(0.2, 0.5, by = 0.05),
+                     limits = c(0.2,0.5),
+                     expand = c(0,0)) +
+  annotate("text",label="A", x=.25,y=.43, size=15, colour="black") +
+  theme(axis.text.x=element_text(color="black", size=20, hjust=1),
+        axis.text.y=element_text(color="black", size= 20)) 
+
+control_evap_I <- ggplot(aes(x=Initial_pollen_weight, y=Final_pollen_weight, col=Treatment), data=evap_IC) + geom_point(size=4)  + theme_classic(base_size=20) + theme(legend.text.align = 0) +
+  labs(x="Initial pollen weight", y = "Final pollen weight") +
+  scale_color_viridis(labels = c(expression("Baccharis"),expression("Buckwheat"),expression("Dandelion"), expression("Dog fennel"), expression("Red maple"), expression("Sagebrush"), expression("Sunflower")), discrete=TRUE, option ="magma") +
+  scale_y_continuous(breaks = seq(0.2, 0.45, by = 0.05),
+                     limits = c(0.2,0.45),
+                     expand = c(0,0)) +
+  scale_x_continuous(breaks = seq(0.2, 0.5, by = 0.05),
+                     limits = c(0.2,0.5),
+                     expand = c(0,0))  +
+  annotate("text",label="B", x=.25,y=.43, size=15, colour="black") +
+  theme(axis.text.x=element_text(color="black", size=20, hjust=1),
+        axis.text.y=element_text(color="black", size= 20)) 
+
+
+control_evap_A
+control_evap_I
+#(control_evap_A,control_evap_I, cols=1)
+```
+
+First, I will do this for just one pollen type: IVA in the Adler lab (Treatment = = "SUN"). Here what I do is first filter only the control sunflower (no bees, just evaporation) and make a linear regression of the final and initial pollen weights. I have decided to not constrain the intercept at zero because the line fit the data far better and there could be non-linearity close to the origin (https://dynamicecology.wordpress.com/2017/04/13/dont-force-your-regression-through-zero-just-because-you-know-the-true-intercept-has-to-be-zero/).
+
+```{r}
+# evap = weights of the pollen without bees (evaporation controls)
+# first filter out the diet we want for the control weights
+evap_AC_IVA <- AConsume %>%
+  filter(Colony == "control" & Treatment == "IVA") 
+# make a linear regression with the old & new control weights
+evap_AC_IVA_lg <- lm(Final_pollen_weight ~ Initial_pollen_weight + 0, data = evap_AC_IVA)
+summary(evap_AC_IVA_lg)
+# plot to see the relationship
+plot(Final_pollen_weight ~ Initial_pollen_weight, data = evap_AC_IVA)
+abline(evap_AC_IVA_lg)
+##Now with the intercept is NOT constrained to zero because of poor fit with the data
+##this likely indicates a non-linear regression near the origin (e.g. very fast evaporation at very small pollen ball initial weights)
+evap_AC_IVA_lg <- lm(Final_pollen_weight ~ Initial_pollen_weight, data = evap_AC_IVA)
+summary(evap_AC_IVA_lg)
+# plot to see the relationship
+plot(Final_pollen_weight ~ Initial_pollen_weight, data = evap_AC_IVA)
+abline(evap_AC_IVA_lg)
+
+```
+
+Now that I have a regression, I can predict, given an initial weight, what the final "should" be. That will give us the predicted final weight. The amount that the bees consumed is the predicted final weight (lost to evaporation) subtracted by the measured final weight (evaporation + consumption). Sometimes the values are negative because of defecation, so the final value is bigger than the initial.
+
+Here I will try just with one species of pollen (Iva)
+```{r}
+# cons = weights of the pollen with bees
+# now take the values from the pollen fed to the bees
+cons_AC_IVA <- AConsume %>%
+  filter(!Colony == "control" & Treatment == "IVA") 
+# now predict what those values would be based on our evaporation model:
+cons_AC_IVA$predicted_final_weight <- predict(evap_AC_IVA_lg, cons_AC_IVA)
+
+cons_AC_IVA <- cons_AC_IVA %>%
+  mutate(pollen_consumed = Final_pollen_weight - predicted_final_weight)
+plot(cons_AC_IVA$Initial_pollen_weight,cons_AC_IVA$pollen_consumed)
+hist(cons_AC_IVA$pollen_consumed)
+
+```
+
+I do not want to have to do this manually for each pollen type, so I will write a function to do it for me. I will then compare the results from my model with the ones above (IVA calculated with the predict function), to ensure that my calculations are correct.
+
+```{r}
+A_CONS<- AConsume %>%
+  filter(Colony == "control") %>%
+  group_by(Treatment) %>%
+  do(pollen_lm = tidy(lm(Final_pollen_weight ~ Initial_pollen_weight, data = .))) %>% 
+  unnest(pollen_lm) %>%
+  group_by(Treatment) %>%
+  pivot_wider(names_from=term, values_from=c("estimate":"p.value"))
+
+A_CONS_merged<- merge(AConsume, A_CONS, by="Treatment")  %>%
+  rename(intercept_estimate = "estimate_(Intercept)") %>%
+  mutate(predicted_final_pollen = estimate_Initial_pollen_weight* Initial_pollen_weight   + intercept_estimate) %>%
+  mutate(pollen_consumed =Final_pollen_weight- predicted_final_pollen)
+
+#to test with predict function
+A_CONS_IVA <- A_CONS_merged %>%
+  filter(Treatment=="IVA")
+
+testing_IVA <-  merge(A_CONS_IVA, cons_AC_IVA, by="Bee_ID")
+  
+plot(testing_IVA$pollen_consumed.x,testing_IVA$pollen_consumed.y) 
+
+```
+
+It works! So we can employ the values from the ACONS_merged for the analyses of consumption and pathogen counts.
+
+## Merge pollen consumption data with Crithidia count data
+
+```{r}
+A_CONS_merged_bees <- A_CONS_merged %>% filter(!Colony=="control" & !is.na(pollen_consumed))
+hist(A_CONS_merged_bees$pollen_consumed)
+
+I_CONS<- IConsume %>%
+  filter(Colony == "control") %>%
+  group_by(Treatment) %>%
+  do(pollen_lm = tidy(lm(Final_pollen_weight ~ Initial_pollen_weight, data = .))) %>% 
+  unnest(pollen_lm) %>%
+  group_by(Treatment) %>%
+  pivot_wider(names_from=term, values_from=c("estimate":"p.value"))
+
+I_CONS_merged<- merge(IConsume, I_CONS, by="Treatment")  %>%
+  rename(intercept_estimate = "estimate_(Intercept)") %>%
+  mutate(predicted_final_pollen = estimate_Initial_pollen_weight* Initial_pollen_weight   + intercept_estimate) %>%
+  mutate(pollen_consumed = Final_pollen_weight - predicted_final_pollen)
+
+I_CONS_merged_bees <- I_CONS_merged %>% filter(!Colony=="control" & !is.na(pollen_consumed))
+
+AConsume_small<- A_CONS_merged_bees %>%
+  select(Bee_ID, pollen_consumed)
+
+ACount_cons<- merge(AConsume_small, ACount, by="Bee_ID")
+
+IConsume_small<- I_CONS_merged_bees %>%
+  select(Bee_ID, pollen_consumed)
+
+ICount_cons<- merge(IConsume_small, ICount, by="Bee_ID")
+
+
+```
+
+For the pathogen analysis, I will make a subsetted dataset that excludes dead bees. Then I can have another dataset that also is merged with the pollen consumption data (different, since there were not pollen measurements for all of the bees)
+
+```{r}
+ACount_no_deaths <- ACount %>% 
+  filter(Dead==0) #0 indicates alive, 1 means death
+
+ACount_no_deaths_cons <- ACount_cons %>% 
+  filter(Dead==0)
+
+ICount_no_deaths <- ICount %>% 
+  filter(!Dead=="n/a" & !Dead=="Y")
+
+ICount_no_deaths_cons <- ICount_cons %>% 
+  filter(!Dead=="n/a" & !Dead=="Y" & !is.na(Count))
+```
+
+##Q DOES POLLEN SPECIES AFFECT CRITHIDIA COUNTS?
+
+## Adler lab
+
+First look at general boxplot of patterns
+```{r}
+summary(ACount_no_deaths$Treatment)
+
+boxplot(Count ~ Treatment, data = ACount_no_deaths)
+boxplot(Count ~ Colony, data = ACount_no_deaths)
+boxplot(Count ~ Inoc_Date, data = ACount_no_deaths)
+plot(Count ~ pollen_consumed, data = ACount_cons)
+
+hist(ACount_no_deaths$Count)
+
+ACount_no_deaths2 <- ACount_no_deaths %>% 
+    mutate(Pollen_type=factor(Treatment,levels=c("MAP", "BW","XAN","IVA","SUN","AMB"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "SUN", "Sunflower",
+                                ifelse(Treatment == "AMB" | Treatment == "IVA" | Treatment == "XAN", "Other Asteraceae", ifelse(Treatment == "BW" | Treatment == "MAP", "Non-Asteraceae", NA))))
+
+ACount_no_deaths2$Flower_family<-factor(ACount_no_deaths2$Flower_family, 
+                                     levels=c("Non-Asteraceae","Sunflower","Other Asteraceae"))
+
+my_path_box_title<-expression(paste(italic("Crithidia")," counts in lab 1"))
+my_path_box_y<-expression(paste(italic("Crithidia")," count"))
+boxA<-ggplot(ACount_no_deaths2, aes(x=Pollen_type, y=Count, color=Flower_family)) +
+  geom_boxplot(lwd=1) +
+  theme_classic(base_size=20) +
+  theme(axis.text.x=element_text(color="black"),
+        axis.text.y=element_text(color="black", face="italic", size= 20),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels=c(expression(italic(Acer)),expression(italic(Fagopyrum)),expression(italic(Xanthium)),expression(italic(Iva)),expression(italic(Helianthus)),expression(italic(Ambrosia)))) + labs(x="Pollen treatment", y=my_path_box_y, title= my_path_box_title)  +
+  scale_color_manual(values=c( "black","#E69F00", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="right") 
+
+```
+
+First look at variables with additive relationship to look at variance inflation (Performance package). Since it looks good, I then add the interaction terms (which would have inflated VIFs). Interactions negatively affected convergence, so left as additive. 
+
+Because there are fewer than 5 colonies, Lynn recommended using colony as a fixed effect instead of a random effect, but the model is severely over-fitted that way. I removed body size as a co-variate and the model runs and looks really good. Significant comparisons with BW: Sunflower and Ambrosia, Xanthium marginally, but not Iva. 
+
+Bee size (Wing_MM) negatively affected model convergence, so removed from analyses
+
+```{r}
+mod_fullA1 = glmmTMB(Count~ Treatment + pollen_consumed +Colony +  (1|Inoc_Date), zi=~Treatment+pollen_consumed, data=ACount_no_deaths_cons, family=nbinom1) #treatment*pollen_consumed interaction negatively affected convergence so left as additive relationship
+check_collinearity(mod_fullA1)
+simoutbin500<-simulateResiduals(fittedModel=mod_fullA1, n=250)
+plot(simoutbin500)  
+summary(mod_fullA1)
+Anova(mod_fullA1) #given that pollen consumption not a significant predictor, will also analyze full dataset (including bees for which we do not have consumption data)
+summary(glht(mod_fullA1,linfct=mcp(Treatment="Tukey")))
+
+#model without pollen consumption (larger data set)
+mod_fullA1.1 = glmmTMB(Count~ Treatment +Colony +  (1|Inoc_Date), zi=~Treatment, data=ACount_no_deaths, family=nbinom1)
+simoutbin500<-simulateResiduals(fittedModel=mod_fullA1.1, n=250)
+plot(simoutbin500)  
+summary(mod_fullA1.1)
+Anova(mod_fullA1.1) 
+summary(glht(mod_fullA1.1,linfct=mcp(Treatment="Tukey")))
+
+```
+
+## Irwin lab
+
+First look at general boxplot of patterns
+```{r}
+summary(ICount_no_deaths$Treatment)
+
+boxplot(Count ~ Treatment, data = ICount_no_deaths)
+boxplot(Count ~ Colony, data = ICount_no_deaths)
+boxplot(Count ~ Inoc_Date, data = ICount_no_deaths)
+plot(Count ~ pollen_consumed, data = ICount_cons)
+
+hist(ICount_no_deaths$Count)
+
+ICount_no_deaths2 <- ICount_no_deaths %>% 
+    mutate(Pollen_type=factor(Treatment,levels=c("buckwheat", "red maple","sagebrush","dog fennel","baccharis", "sunflower","dandelion"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "sunflower", "Sunflower",
+                                ifelse(Treatment == "baccharis" | 
+                                         Treatment == "dandelion" | Treatment == "dog fennel" | Treatment == "sagebrush", "Other Asteraceae",                    ifelse(Treatment == "buckwheat" | Treatment == "red maple", "Non-Asteraceae", NA))))
+
+ICount_no_deaths2$Flower_family<-factor(ICount_no_deaths2$Flower_family, 
+                  levels=c("Non-Asteraceae","Sunflower","Other Asteraceae"))
+
+
+```
+
+Including bee size negatively affected model fit in UMass, so was not included here either to keep models as similar as possible.
+
+```{r}
+mod_fullI1 = glmmTMB(Count~ Treatment+pollen_consumed + Colony + (1|Inoc_Date), zi=~Treatment+pollen_consumed, data=ICount_no_deaths_cons, family=nbinom1)
+check_collinearity(mod_fullI1)
+simoutbin500<-simulateResiduals(fittedModel=mod_fullI1, n=250)
+plot(simoutbin500)  
+summary(mod_fullI1)
+Anova(mod_fullI1)
+summary(glht(mod_fullI1,linfct=mcp(Treatment="Tukey")))
+
+#what if we exclude pollen consumption? Unlike UMass, NCSU has pollen consumption measurement for every bee so I do not need to evaluate with a different dataset
+mod_fullI1.2 = glmmTMB(Count~ Treatment + Colony + (1|Inoc_Date), zi=~Treatment, data=ICount_no_deaths_cons, family=nbinom1)
+simoutbin500<-simulateResiduals(fittedModel=mod_fullI1.2, n=250)
+plot(simoutbin500)  
+Anova(mod_fullI1.2)
+summary(glht(mod_fullI1.2,linfct=mcp(Treatment="Tukey")))
+
+```
+
+Spine lengths and crithidia counts, standardized by buckwheat. 
+
+```{r}
+
+# Running analysis excluding spine lengths == 0 (Buckwheat and Maple)
+ACount_BW<- ACount_no_deaths %>% group_by(Treatment) %>% summarise(BWCrith=mean(Count)) %>% filter(Treatment=="BW") 
+
+ACount_summary_small<-ACount_no_deaths %>% filter(!avg_pollen_length==0) %>% group_by(Treatment, avg_pollen_length) %>% summarise(CrithAvg=mean(Count)) %>% cbind(ACount_BW) %>% mutate(STDCrith = CrithAvg/BWCrith)
+
+ICount_BW<- ICount_no_deaths %>% group_by(Treatment) %>% summarise(BWCrith=mean(Count)) %>% filter(Treatment=="buckwheat") 
+
+ICount_summary_small<-ICount_no_deaths %>% filter(!avg_pollen_length==0) %>% group_by(Treatment, avg_pollen_length) %>% summarise(CrithAvg=mean(Count)) %>% cbind(ICount_BW) %>% mutate(STDCrith = CrithAvg/BWCrith)
+
+CombinedSpines_small<-rbind(ICount_summary_small,ACount_summary_small)
+
+spikesmod1<- lm(STDCrith~avg_pollen_length, data= CombinedSpines_small)
+
+# Including all points
+
+ACount_BW<- ACount_no_deaths %>% 
+  group_by(Treatment) %>% 
+  summarise(BWCrith=mean(Count)) %>% 
+  filter(Treatment=="BW") 
+
+ACount_summary<-ACount_no_deaths %>% 
+  group_by(Treatment, avg_pollen_length) %>% 
+  summarise(CrithAvg=mean(Count)) %>% 
+  cbind(ACount_BW) %>% 
+  mutate(STDCrith = CrithAvg/BWCrith) %>% 
+  rename(Treatment = "Treatment...1") %>% 
+  filter(Treatment != "BW")
+
+ICount_BW<- ICount_no_deaths %>% 
+  group_by(Treatment) %>% 
+  summarise(BWCrith=mean(Count)) %>% 
+  filter(Treatment=="buckwheat") 
+
+ICount_summary<-ICount_no_deaths %>% 
+  group_by(Treatment, avg_pollen_length) %>% 
+  summarise(CrithAvg=mean(Count)) %>% 
+  cbind(ICount_BW) %>% 
+  mutate(STDCrith = CrithAvg/BWCrith) %>% 
+  rename(Treatment = "Treatment...1") %>% 
+  filter(Treatment != "buckwheat")
+
+CombinedSpines<-rbind(ICount_summary,ACount_summary) %>% 
+  mutate(Treatment = recode(Treatment, 
+                            'dandelion' = 'Dandelion',
+                            'sunflower' = 'Sunflower NCSU',
+                            'dog fennel' = 'Dog fennel',
+                            'AMB' = 'Ragweed',
+                            'baccharis' = 'Baccharis', 
+                            'SUN' = 'Sunflower UMass',
+                            'XAN' = 'Cocklebur',
+                            'sagebrush' = 'Sagebrush',
+                            'IVA' = 'Marsh elder',
+                            'red maple' = 'Red maple NCSU',
+                            'MAP' = 'Red maple UMass')) %>%
+  arrange(CrithAvg)
+
+spikesmod<- lm(STDCrith~avg_pollen_length, data= CombinedSpines)
+
+summary(spikesmod)
+plot(STDCrith~avg_pollen_length, data= CombinedSpines)
+abline(spikesmod)
+
+my_y<-(expression(paste("Proportion ", italic("Crithidia")," relative to BW")))
+
+spinesPlot<-ggplot(CombinedSpines, aes(x = avg_pollen_length, y = STDCrith)) +
+  geom_point(lwd=5, aes(colour = Treatment)) + geom_smooth(method ='lm', linetype="dashed", color="black", size= 2) +
+  theme_classic(base_size=35) +
+  theme(axis.text.x=element_text(color="black", size=30, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 30),
+        plot.title = element_text(hjust = 0.5)) + labs(x="Pollen spine length (μm)", y =my_y) +
+  scale_x_continuous(breaks = seq(0, 5.5, by = 1),
+                     limits = c(0,5.5)) +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.2),
+                     limits = c(-1,1.2))  +
+  coord_cartesian(xlim=c(0,5.5), ylim=c(0,1)) +
+  scale_color_viridis(discrete = TRUE, limits = c('Dandelion', 'Sunflower NCSU', 'Dog fennel', 'Ragweed', 'Baccharis', 'Sunflower UMass', 'Cocklebur', 'Sagebrush', 'Marsh elder', 'Red maple NCSU', 'Red maple UMass' ), 
+      breaks=c('Dandelion', 'Sunflower NCSU', 'Dog fennel', 'Ragweed', 'Baccharis', 'Sunflower UMass', 'Cocklebur', 'Sagebrush', 'Marsh elder', 'Red maple NCSU', 'Red maple UMass' ), option = "A", direction = -1) + 
+  annotate("text", label = " y = − 0.1x + 0.64, R^2 = 0.23", x = 3.5, y = 0.9, size = 8) #1300 x 850
+
+  #annotate("text",label="B", x=.25,y=.43, size=15, colour="black") +
+
+```
+
+Now to calculate effect sizes
+
+```{r}
+library(EMAtools)
+library(effsize)
+library(FSA)
+
+x<- ACount_no_deaths %>%
+  group_by(Treatment) %>%
+  summarise(meanCrith = mean(Count),
+            SECrith = se(Count),
+            n = n())
+
+#sunflower vs buckwheat
+1-(27.61538/108.26923)
+#sunflower vs red maple
+1-(27.61538/120.30435)
+#Ragweed (Ambrosia) vs buckwheat
+1-(17.31818/108.26923)
+#Ragweed (Ambrosia) vs red maple
+1-(17.31818/120.30435)
+#Cocklebur (Xanthium) vs buckwheat
+1-(41.37500/108.26923)
+#Cocklebur (Xanthium) vs red ample
+1-(41.37500/120.30435)
+#marsh elder (Iva) vs buckwheat
+1-(42.17647/108.26923)
+
+#Adler lab
+
+y<- ICount_no_deaths_cons %>%
+  group_by(Treatment) %>%
+  summarise(meanCrith = mean(Count),
+            SECrith = se(Count),
+            n = n())
+
+#sunflower vs buckwheat
+1-(12.676471/54.583333)
+#sunflower vs red maple
+1-(12.676471/52.882353)
+#Dandelion (Taraxacum) vs buckwheat
+1-(4.285714/54.583333)
+#Dandelion (Taraxacum) vs red maple
+1-(4.285714/52.882353)
+#Dog fennel (Eupatorium) vs buckwheat
+1-(17.187500/54.583333)
+#Dog fennel (Eupatorium) vs red maple
+1-(17.187500/52.882353)
+#Baccharis vs buckwheat
+1-(22.709677/54.583333)
+
+
+
+
+```
+
+#Q3 ARE MORTALITY RATES DIFFERENT DEPENDING ON POLLEN TREATMENT?
+
+#Adler lab
+
+```{r}
+table(ACount$Treatment,ACount$Dead)
+table(ACount$Dead)
+
+library(survival)
+library(survminer)
+library(viridis)
+library(ggtext)
+library(emmeans)
+
+ACount_cons <- ACount_cons %>% mutate(days_alive = Days_til_dead)
+coxme1 <- coxme(Surv(days_alive,Dead) ~ Treatment  + pollen_consumed + Colony + (1|Inoc_Date), data = ACount_cons)
+Anova(coxme1)
+cox1.lm1<-lsmeans(coxme1, specs="Treatment")
+pairs(cox1.lm1) #pollen consumed not significant, so to not lose precious data point will analyze full dataset
+
+
+# what if not excluding bees for which we do not have consumption data
+ACount <- ACount %>% mutate(days_alive = Days_til_dead)
+coxme1.2 <- coxme(Surv(days_alive,Dead) ~ Treatment  + Colony + (1|Inoc_Date), data = ACount)
+Anova(coxme1.2)
+cox1.2.lm1<-emmeans(coxme1.2, specs="Treatment")
+pairs(cox1.2.lm1)
+
+# what if we look at avg pollen spine length as predictor?
+ACount <- ACount %>% mutate(days_alive = Days_til_dead)
+coxme1.3 <- coxme(Surv(days_alive,Dead) ~ avg_pollen_length  + Colony + (1|Inoc_Date), data = ACount)
+Anova(coxme1.3) # not significant
+
+survival1 <- survfit(Surv(days_alive, Dead) ~ Treatment, data=ACount)
+
+survivalPlot1<-ggsurvplot(survival1,size.est = 3.5, fun = function(y) y*100, 
+                     ylab = "Percent surviving", xlab = "Time (days)",
+                     font.x = c(20), font.y = c(20), legend = c("right"), 
+                     legend.title = c("Pollen"), font.legend = c(15), 
+                     font.tickslab=c(15), conf.int = T,
+                    legend.labs = c("Ragweed", "Buckwheat", "Marsh elder", "Red maple", "Sunflower", "Cocklebur")) 
+```
+
+#Irwin lab
+
+Model doesn't run well if pollen treatment is predictor, likely because of very low overall mortality including zeros for both buckwheat and dandelion (all others range from 1-3 bees dying).
+
+```{r}
+table(ICount$Dead)
+
+ICount_cons_surv <- ICount_cons %>% mutate(Alive = ifelse(Dead== "N", 1,0), days_alive= as.numeric(difftime(Death_date, Inoc_Date, units="days")))
+coxme2 <- coxme(Surv(days_alive,Alive) ~ Treatment  + pollen_consumed + Colony + (1|Inoc_Date), data = ICount_cons_surv)
+Anova(coxme2)
+
+
+#what about spine length?
+
+coxme2.2 <- coxme(Surv(days_alive,Alive) ~ avg_pollen_length  + Colony + (1|Inoc_Date), data = ICount_cons_surv)
+Anova(coxme2.2)
+```
+
+## Spikes vs metabolites vs controls
+
+At UMass, 15 bees inoculated on 11/12/19 were procured from a colony (SF-46) that was later discovered to have been infected with Crithidia, and thus it was possible that these bees had been exposed to the pathogen before the trial.  
+
+Additionally, one bee originating from experimental colony SL-2 was not inoculated with Crithidia before entering the one-week diet trial, but it was not possible to pinpoint which bee had not been inoculated, and thus it is not possible to exclude it. 
+
+We want to verify that consumption of pollen was not a predictor of Crithidia counts in bees.
+
+# Consumption and survival
+
+```{r}
+#does pollen consumption at UMass (where measured) affect Crithidia counts?
+
+SpikesAConsume$treatment <- factor(SpikesAConsume$treatment, levels=c("WF-CON","BW-CON", "BW-MET", "BW-SHE", "SF-CON", "SF-MET", "SF-SHE"))
+
+SpikesAConsume$colony <- factor(SpikesAConsume$colony)
+
+SpikesAConsume$inoc_date<-as.Date(SpikesAConsume$inoc_date, "%m/%d/%y")
+
+SpikesAConsume$DeltaPollen<-SpikesAConsume$initial_pollen_weight-SpikesAConsume$final_pollen_weight
+
+plot(SpikesAConsume$treatment, SpikesAConsume$DeltaPollen)
+
+SpikeConsPlot<-ggplot(SpikesAConsume, aes(x=treatment, y=DeltaPollen)) +
+  geom_boxplot(lwd=1, outlier.size=5) +
+  theme_classic(base_size=30) +
+  theme(axis.text.x=element_text(color="black", size=20, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 20),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels=c(expression("WF Whole Pollen"),expression("BW Whole Pollen"),expression("BW Metab. + WF"),expression("BW Exine + WF"),expression("SUN Whole Pollen"),expression("SUN Metab. + WF"), expression("SUN Exine + WF"))) + 
+  labs(x="Diet treatment", y="Pollen consumed (g)") 
+
+mod_fullA2 = glmmTMB(count~ treatment + DeltaPollen + colony + bee_size + (1|inoc_date), zi=~ treatment + DeltaPollen, data=SpikesAConsume, family=nbinom2)
+simoutbin500<-simulateResiduals(fittedModel=mod_fullA2, n=250)
+plot(simoutbin500) 
+summary(mod_fullA2) 
+Anova(mod_fullA2)
+
+library(sjstats)
+check_collinearity(mod_fullA2)
+
+#survival
+#with consumption (At UMass)
+SpikesASurvivalCons<- SpikesAConsume %>% filter(!escape==1) %>% mutate(days_alive = replace_na(days_alive,7))
+
+coxme3.cons <- coxme(Surv(days_alive,death) ~ treatment +  DeltaPollen + colony + (1|inoc_date), data = SpikesASurvivalCons)
+Anova(coxme3.cons)
+
+#all bees (not limited by the bees for which we have consumption)
+SpikesASurvival<- SpikesAOriginal %>% filter(!escape==1) %>% mutate(days_alive = replace_na(days_alive,7))
+
+coxme3 <- coxme(Surv(days_alive,death) ~ treatment +  colony + (1|inoc_date), data = SpikesASurvival)
+Anova(coxme3)
+
+SpikesIOriginal$inoc_date<-as.Date(SpikesIOriginal$inoc_date, "%m/%d/%Y")
+SpikesIOriginal$death_date<-as.Date(SpikesIOriginal$death_date, "%m/%d/%Y")
+
+SpikesISurvival <- SpikesIOriginal %>% mutate(days_alive= as.numeric(difftime(death_date, inoc_date, units="days")), death=recode(dead, Y = 1, N = 0))
+coxme4 <- coxme(Surv(days_alive,death) ~ treatment +  colony + (1|inoc_date), data = SpikesISurvival)
+summary(coxme4)
+Anova(coxme4)
+
+```
+
+Analyzing differences between exine/metabolites treatments on Crithidia counts from both labs together
+
+```{r}
+SpikesAOriginal$lab<-"UMASS"
+SpikesAOriginal$lab_Bee_ID<-paste(SpikesAOriginal$Lab, SpikesAOriginal$ID)
+SpikesASimple<-select(SpikesAOriginal,"lab_Bee_ID","treatment","colony","inoc_date","count","bee_size","lab")
+SpikesASimple<-SpikesASimple %>% na.omit(count)
+
+SpikesI$inoc_date<-as.Date(SpikesI$inoc_date, "%m/%d/%Y")
+SpikesI$death_date<-as.Date(SpikesI$death_date, "%m/%d/%Y")
+SpikesI <- SpikesI %>% mutate(days_alive= as.numeric(difftime(death_date, inoc_date, units="days")), death=recode(dead, Y = 1, N = 0))
+SpikesI$lab<-"NCSU"
+SpikesI$bee_size<-SpikesI$Wing_size/100
+SpikesI$lab_Bee_ID<-paste(SpikesI$Lab, SpikesI$Bee_ID)
+SpikesISimple<-select(SpikesI,"lab_Bee_ID","treatment","colony","inoc_date","count","bee_size","lab")
+
+SpikesCombined<-rbind(SpikesISimple,SpikesASimple)
+
+cols <- c("lab_Bee_ID", "treatment", "colony", "lab")
+
+SpikesCombined <- SpikesCombined %>% mutate_at(cols, factor)
+SpikesCombined$treatment <- factor(SpikesCombined$treatment, levels=c("SF-CON", "SF-SHE",  "SF-MET","BW-CON", "BW-SHE", "BW-MET","WF-CON"))
+
+mod_fullX1 = glmmTMB(count~ lab*treatment  + colony + bee_size + (1|inoc_date), zi=~lab*treatment  + colony + bee_size, data=SpikesCombined, family=nbinom1) # not converging, will remove bee size
+
+mod_fullX2 = glmmTMB(count~ lab*treatment  + colony + (1|inoc_date), zi=~lab*treatment  + colony, data=SpikesCombined, family=nbinom1) # still not converging, will have an additive instead of interaction between lab*treatment in the zi
+
+mod_fullX3 = glmmTMB(count~ lab*treatment  + colony + (1|inoc_date), zi=~treatment+lab, data=SpikesCombined, family=nbinom2) 
+simoutbin500<-simulateResiduals(fittedModel=mod_fullX3, n=250)
+plot(simoutbin500) 
+Anova(mod_fullX3) 
+summary(glht(mod_fullX3,linfct=mcp(treatment="Tukey"))) 
+
+#what if remove colony that had crithidia before experiment
+SpikesCombinedNo46<-SpikesCombined %>% filter(!colony=="SF-46")
+mod_fullX4 = glmmTMB(count~ lab+treatment  + colony +  (1|inoc_date), zi=~treatment+lab, data=SpikesCombinedNo46, family=nbinom2) #interaction negatively affected convergence
+plot(simoutbin500) 
+Anova(mod_fullX4)
+
+
+```
+
+Effect sizes
+
+```{r}
+SCES<- SpikesCombined %>%
+  filter(!is.na(count)) %>%
+  group_by(treatment) %>%
+  summarise(meanCrith = mean(count),
+            SECrith = parameters::standard_error(count),
+            n = n())
+
+#what % relative to the other treatments are sunflower whole pollen and exine?
+
+## smallest difference is between SF exine and BW exine
+100*(1-3.62/19.34)
+
+## largest difference is between SF whole and BW whole
+100*(1-3.39/55.23)
+```
+
+## PLOTS
+
+Multiplot function
+
+```{r}
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+  
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+  
+  if (numPlots==1) {
+    print(plots[[1]])
+    
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+
+```
+
+## PLOTS
+
+```{r}
+#for plotting
+## labs combined
+
+SpikesCombinedPlot<- separate(SpikesCombined, col=treatment, into=c('species', 'pollen_form'), sep='-')
+
+SpikesCombinedPlot$pollen_form <- factor(SpikesCombinedPlot$pollen_form, levels=c("MET","CON","SHE"))
+my_path_y<-expression(paste(italic("Crithidia")," count in 0.02 μL"))
+my_path_box_title<-expression(paste(italic("Crithidia")," counts"))
+SpikesCombinedPlot <- SpikesCombinedPlot %>% mutate(species = ifelse(species == "SF", "Sunflower",
+                                ifelse(species == "BW", "Buckwheat", ifelse(species == "WF", "Wildflower", NA))))
+SpikesCombinedPlot$species <- factor(SpikesCombinedPlot$species, levels=c("Wildflower","Buckwheat","Sunflower"))
+
+
+boxCountSpikeCombined<-ggplot(SpikesCombinedPlot, aes(x=pollen_form, y=count, color=species)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=35) +
+  theme(axis.text.x=element_text(color="black", size=30, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(limits = c(0,400),
+                     expand = c(0,0)) +
+   facet_grid(~species) +
+    scale_color_viridis(discrete=TRUE) +
+scale_x_discrete(labels=c(expression("Metab. + WF pollen"),expression("Whole pollen"),expression("Exine + WF pollen"))) + 
+  labs(x="Diet treatment", y=my_path_y)  +
+  theme(legend.position="none",
+        plot.margin=unit(c(1,5,1,5), 'cm')) # 13x15
+
+## separated by lab
+SpikesA<-SpikesAOriginal
+plot(SpikesA$treatment,SpikesA$count)
+plot(SpikesI$treatment,SpikesI$count)
+
+SpikesA$pollen_form <- factor(SpikesA$pollen_form, levels=c("MET","CON","SHE"))
+SpikesA$species <- factor(SpikesA$species, levels=c("Wildflower","Buckwheat","Sunflower"))
+my_path_y<-expression(paste(italic("Crithidia")," count in 0.02 μL"))
+my_path_box_titleA<-expression(paste(italic("Crithidia")," counts at UMass"))
+
+boxACountSpike<-ggplot(SpikesA, aes(x=pollen_form, y=count, color=species)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=35) +
+  theme(axis.text.x=element_text(color="black", size=30, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(limits = c(0,400),
+                     expand = c(0,0)) +
+  facet_grid(~species) +
+  scale_color_viridis(discrete=TRUE) +
+  scale_x_discrete(labels=c(expression("Metab. + WF pollen"),expression("Whole pollen"),expression("Exine + WF pollen"))) + 
+  labs(x="Diet treatment", y=my_path_y)  +
+  theme(legend.position="none")
+
+
+SpikesI$pollen_form <- factor(SpikesI$pollen_form, levels=c("MET","CON","SHE"))
+SpikesI$species <- factor(SpikesI$species, levels=c("Wildflower","Buckwheat","Sunflower"))
+my_path_y<-expression(paste(italic("Crithidia")," count in 0.02 μL"))
+my_path_box_titleI<-expression(paste(italic("Crithidia")," counts at NCSU"))
+
+boxICountSpike<-ggplot(SpikesI, aes(x=pollen_form, y=count, color=species)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=35) +
+  theme(axis.text.x=element_text(color="black", size=30, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(limits = c(0,400),
+                     expand = c(0,0)) +
+  facet_grid(~species) +
+  scale_color_viridis(discrete=TRUE) +
+  scale_x_discrete(labels=c(expression("Metab. + WF pollen"),expression("Whole pollen"),expression("Exine + WF pollen"))) + 
+  labs(x="Diet treatment", y=my_path_y)  +
+  theme(legend.position="none") 
+
+#multiplot(boxACountSpike,boxICountSpike)#24 X 18 pdf
+
+
+mod_fullX3 = glmmTMB(count~ lab*treatment  + colony + (1|inoc_date), zi=~treatment+lab, data=SpikesCombined, family=nbinom2) 
+tuk2<-(glht(mod_fullX3,linfct=mcp(treatment="Tukey"))) 
+tuk.cld2 <- cld(tuk2)
+#old.par <- par(mai=c(1,1,1.25,1), no.readonly = TRUE)
+### plot using different colors
+#plot(tuk.cld2)
+#par(old.par)
+
+
+#par(mar=c(7,4,4,2)+0.1)
+
+
+```
+
+Boxplot with consumption and counts for each lab
+
+```{r}
+ACount_no_deaths3 <- ACount_no_deaths_cons %>% 
+    mutate(Pollen_type=factor(Treatment,levels=c("MAP", "BW","XAN","IVA","SUN","AMB"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "SUN", "Sunflower",
+                                ifelse(Treatment == "AMB" | Treatment == "IVA" | Treatment == "XAN", "Other Asteraceae", ifelse(Treatment == "BW" | Treatment == "MAP", "Non-Asteraceae", NA))))
+
+ACount_no_deaths3$Flower_family<-factor(ACount_no_deaths3$Flower_family,                            levels=c("Non-Asteraceae","Sunflower","Other Asteraceae"))
+
+my_path_box_y<-expression(paste("log(",italic("Crithidia")," count +1) in 0.02 μL"))
+boxACount<-ggplot(ACount_no_deaths3, aes(x=Pollen_type, y=Count, color=Flower_family)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size=30),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels=c(expression("Red maple"),expression("Buckwheat"),expression("Cocklebur"),expression("Marsh elder"),expression("Sunflower"),expression("Ragweed"))) + 
+  labs(x="Pollen treatment", y=my_path_box_y)  +
+  scale_color_manual(values=c( "black","#E69F00", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="none") +
+  annotate("text",label="A", x=.9,y=350, size=8.5, colour="black")
+
+boxACons<-ggplot(ACount_no_deaths3, aes(x=Pollen_type, y=pollen_consumed, color=Flower_family)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size=30),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+   scale_x_discrete(labels=c(expression("Red maple"),expression("Buckwheat"),expression("Cocklebur"),expression("Marsh elder"),expression("Sunflower"),expression("Ragweed"))) + 
+  labs(x="Pollen treatment", y="Pollen consumed", title= "Pollen consumed at UMass")  +
+  scale_color_manual(values=c( "black","#E69F00", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="bottom") 
+
+ICount_no_deaths3 <- ICount_no_deaths_cons %>% 
+    mutate(Pollen_type=factor(Treatment,levels=c("buckwheat", "red maple","sagebrush","dog fennel","baccharis", "sunflower","dandelion"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "sunflower", "Sunflower",
+        ifelse(Treatment == "baccharis" | Treatment == "dandelion" | Treatment == "dog fennel" | Treatment == "sagebrush", "Other Asteraceae",                    ifelse(Treatment == "buckwheat" | Treatment == "red maple", "Non-Asteraceae", NA))))
+
+ICount_no_deaths3$Flower_family<-factor(ICount_no_deaths3$Flower_family, 
+                  levels=c("Non-Asteraceae","Sunflower","Other Asteraceae"))
+
+my_path_box_title2<-expression(paste(italic("Crithidia")," counts at NCSU"))
+my_path_box_y<-expression(paste("log(",italic("Crithidia")," count +1) in 0.02 μL"))
+boxICount<-ggplot(ICount_no_deaths3, aes(x=Pollen_type, y=Count, color=Flower_family)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size = 30),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+ scale_x_discrete(labels=c(expression("Buckwheat"),expression("Red maple"),expression("Sagebrush"),expression("Dog fennel"),c(expression("Baccharis"),expression("Sunflower")),expression("Dandelion"))) +
+ labs(x="Pollen treatment", y=my_path_box_y, title= my_path_box_title2)  +
+  scale_color_manual(values=c( "black","#E69F00", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="none") 
+
+boxICons<-ggplot(ICount_no_deaths3, aes(x=Pollen_type, y=pollen_consumed, color=Flower_family)) +
+  geom_boxplot(lwd=2) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size = 30, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+ scale_x_discrete(labels=c(expression("Buckwheat"),expression("Red maple"),expression("Sagebrush"),expression("Dog fennel"),c(expression("Baccharis"),expression("Sunflower")),expression("Dandelion"))) +
+  labs(x="Pollen treatment", y="Pollen consumed", title= "Pollen consumed at NCSU")  +
+  scale_color_manual(values=c( "black","#E69F00", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="bottom", 
+        legend.key.height= unit(2, 'cm'),
+        legend.key.width= unit(4, 'cm'),
+        legend.title = element_text(size=50),
+        legend.text = element_text(size=50))
+
+multiplot(boxACount,boxACons, boxICount, boxICons,cols=2)#27 x 37 pdf
+```
+
+Now on full dataset (not limited by consumption)
+
+
+
+```{r}
+ACount_no_deaths4 <- ACount_no_deaths %>% 
+  mutate(Pollen_type=factor(Treatment, levels=c("MAP", "BW","XAN","IVA","SUN","AMB"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "AMB" | Treatment == "IVA" | Treatment == "XAN" | Treatment == "SUN", "Asteraceae", "Non-Asteraceae"))
+
+ACount_no_deaths4$Flower_family<-factor(ACount_no_deaths4$Flower_family,                            levels=c("Non-Asteraceae", "Asteraceae"))
+
+my_path_box_title<-expression(paste(italic("Crithidia")," counts at UMass"))
+my_path_y<-expression(paste(italic("Crithidia")," count in 0.02 μL"))
+boxACountFull<-ggplot(ACount_no_deaths4, aes(x=Pollen_type, y=Count, color=Flower_family)) +
+  geom_boxplot(lwd=3, outlier.size=5) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size=40, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels=c(expression("Red maple"),expression("Buckwheat"),expression("Cocklebur"),expression("Marsh elder"),expression("Sunflower"),expression("Ragweed"))) + 
+  labs(x="Pollen treatment", y=my_path_y)  +
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="bottom") +
+  scale_y_continuous(limits = c(0,400),
+                     expand = c(0,0)) +
+  scale_color_manual(values=c( "black","#D55E00"))  
+
+
+ICount_no_deaths4 <- ICount_no_deaths %>% 
+    mutate(Pollen_type=factor(Treatment,levels=c("buckwheat", "red maple","sagebrush","dog fennel","baccharis", "sunflower","dandelion"))) %>%
+  mutate(Flower_family = ifelse(Treatment == "sunflower" | Treatment == "baccharis" | Treatment == "dandelion" | Treatment == "dog fennel" | Treatment == "sagebrush", "Asteraceae", "Non-Asteraceae"))
+
+ICount_no_deaths4$Flower_family<-factor(ICount_no_deaths4$Flower_family, 
+                  levels=c("Non-Asteraceae", "Asteraceae"))
+
+my_path_box_title2<-expression(paste(italic("Crithidia")," counts at NCSU"))
+my_path_y<-expression(paste(italic("Crithidia")," count in 0.02 μL"))
+boxICountFull<-ggplot(ICount_no_deaths4, aes(x=Pollen_type, y=Count, color=Flower_family)) +
+  geom_boxplot(lwd=3,outlier.size = 5) +
+  theme_classic(base_size=50) +
+  theme(axis.text.x=element_text(color="black", size=40, angle=45, hjust=1),
+        axis.text.y=element_text(color="black", face="italic", size= 40),
+        plot.title = element_text(hjust = 0.5)) +
+ scale_x_discrete(labels=c(expression("Buckwheat"),expression("Red maple"),expression("Sagebrush"),expression("Dog fennel"),c(expression("Baccharis"),expression("Sunflower")),expression("Dandelion"))) +
+ labs(x="Pollen treatment", y=my_path_y)  +
+  scale_color_manual(values=c( "black", "#D55E00")) + 
+  guides(color=guide_legend(title="Flower family")) +
+  theme(legend.position="bottom")  +
+  scale_y_continuous(limits = c(0,400),
+                     expand = c(0,0)) 
+
+multiplot(boxACountFull, boxICountFull,cols=2)#18 x 36 pdf
+
+
+mod_fullA1.1 = glmmTMB(Count~ Treatment +Colony + (1|Inoc_Date), zi=~Treatment, data=ACount_no_deaths, family=nbinom1)
+
+
+tuk2<-(glht(mod_fullA1.1,linfct=mcp(Treatment="Tukey"))) 
+#tuk.cld2 <- cld(tuk2)
+#plot(tuk.cld2)
+#old.par <- par(mai=c(1,1,1.25,1), no.readonly = TRUE)
+### plot using different colors
+#plot(tuk.cld2)
+#par(old.par)
+
+mod_fullI1.2 = glmmTMB(Count~ Treatment + Colony + (1|Inoc_Date), zi=~Treatment, data=ICount_no_deaths_cons, family=nbinom1)
+
+tuk2<-(glht(mod_fullI1.2,linfct=mcp(Treatment="Tukey"))) 
+tuk.cld2 <- cld(tuk2)
+#plot(tuk.cld2)
+#old.par <- par(mai=c(1,1,5,1), no.readonly = TRUE)
+### plot using different colors
+#plot(tuk.cld2)
+#par(old.par)
+
+```
+
+
+```{r}
+#multiplot(consPlot,pathPlot, cols=2) # 1900 x 800
+#multiplot(control_evap_A, control_evap_I)
+#multiplot(boxA,boxI, cols=2)
+```
